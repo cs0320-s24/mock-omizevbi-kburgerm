@@ -4,7 +4,7 @@ import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
 
 /* 
-  You'll want to expand this component (and others) for the sprints! Remember 
+  You will want to expand this component (and others) for the sprints! Remember 
   that you can pass "props" as function arguments. If you need to handle state 
   at a higher level, just move up the hooks and pass the state/setter as a prop.
   
