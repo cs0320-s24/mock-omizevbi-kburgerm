@@ -1,3 +1,5 @@
+import { func } from "prop-types";
+
 /**
  * A command-processor function for our REPL. The function returns a string, which is the value to print to history when
  * the command is done executing.
@@ -15,12 +17,13 @@ export interface REPLFunction {
 interface CommandRegistry {
     [command: string]: REPLFunction;
 }
-
+ 
 /**
  * Command Processor Class
  */
 class CommandProcessor {
     private registry: CommandRegistry = {};
+    private commandHistory: string[] = []; 
 
     /**
      * Register a new command
