@@ -2,12 +2,17 @@ import { Dispatch, SetStateAction, useState } from "react";
 import "../styles/main.css";
 import { ControlledInput } from "./ControlledInput";
 import { string } from "prop-types";
+import { REPLFunction } from "./REPLFunction"
+import { registerCommand, processCommand } from "./REPLFunction";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   // CHANGED
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
+
+  command: string;
+  setCommand: Dispatch<SetStateAction<string>>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
@@ -17,12 +22,33 @@ export function REPLInput(props: REPLInputProps) {
   const [commandString, setCommandString] = useState<string>("");
   // TODO WITH TA : add a count state
   const [count, setCount] = useState<number>(0);
+  
 
   const mockData: Array<{ [key: string]: any }> = [
     { name: "John", age: 30 },
     { name: "Alice", age: 25 },
     { name: "Bob", age: 35 },
   ];
+
+  registerCommand("load_file", (args: Array<string>): string | string[][] => {
+    props.setCommand("load_file");
+    if (args.length === 0) {
+      return "Please provide a file name.";
+    }
+    const filePath: string = args[0];
+
+    if (filePath === "nonexistent.csv") {
+      return "Please check input, that file does not exist.";
+    }
+
+    const knownConstants: string[] = [];
+    knownConstants.push("mockData");
+    if (!knownConstants.includes(filePath)) {
+      return "Please check input, that file does not exist.";
+    }
+
+    return "CSV has been loaded succesfully!";
+  })
 
   // This function is triggered when the button is clicked.
   function handleSubmit(commandString: string) {
@@ -42,9 +68,6 @@ export function REPLInput(props: REPLInputProps) {
       const [command, ...args] = commandString.split(" ");
       switch (command) {
         case "load_file":
-          if (args.length === 0) {
-            return "Please provide a file name.";
-          }
           return handleLoadCSV(args); // Assuming only one filename argument is expected
         // Add more cases for other commands here
         default:
@@ -53,6 +76,9 @@ export function REPLInput(props: REPLInputProps) {
     }
 
   function handleLoadCSV(args: Array<string>): string {
+    if (args.length === 0) {
+      return "Please provide a file name.";
+    }
     const filePath: string = args[0];
 
     if (filePath === "nonexistent.csv") {

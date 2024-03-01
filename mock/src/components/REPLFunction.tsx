@@ -18,25 +18,21 @@ interface CommandRegistry {
     [command: string]: REPLFunction;
 }
  
-/**
- * Command Processor Class
+
+const registry = new Map<string, REPLFunction>
+/**     
+ * * Register a new command
+ * @param command Command name
+ * @param func Function to execute for the command
  */
-class CommandProcessor {
-    private registry: CommandRegistry = {};
-    private commandHistory: string[] = []; 
+export const registerCommand = (command: string, func: REPLFunction) => {
+    registry.set(command, func)
+};
 
-    /**
-     * Register a new command
-     * @param command Command name
-     * @param func Function to execute for the command
-     */
-    registerCommand(command: string, func: REPLFunction) {
-        this.registry[command] = func;
-    }
-
-    /**
-     * Process a command
-     * @param input Input string containing command and arguments
-     */
-    processCommand(input: string) {}
-}
+/**
+ * Process a command
+ * @param input Input string containing command and arguments
+ */
+export const processCommand = (command: string): REPLFunction | undefined => {
+    return registry.get(command)
+};
