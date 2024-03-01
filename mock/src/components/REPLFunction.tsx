@@ -8,7 +8,7 @@ import { func } from "prop-types";
  * *NOT* contain the command-name prefix.
  */
 export interface REPLFunction {
-  (args: Array<string>): String | String[][];
+  (args: Array<string>): string | string[][];
 }
 
 /**

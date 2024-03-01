@@ -4,6 +4,7 @@ import { ControlledInput } from "./ControlledInput";
 import { string } from "prop-types";
 import { REPLFunction } from "./REPLFunction"
 import { registerCommand, processCommand } from "./REPLFunction";
+import { viewMap } from "../mockdata";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
@@ -22,6 +23,7 @@ export function REPLInput(props: REPLInputProps) {
   const [commandString, setCommandString] = useState<string>("");
   // TODO WITH TA : add a count state
   const [count, setCount] = useState<number>(0);
+  const [loadedFile, setLoadedFile] = useState<string>('');
   
 
   const mockData: Array<{ [key: string]: any }> = [
@@ -31,7 +33,7 @@ export function REPLInput(props: REPLInputProps) {
   ];
 
   registerCommand("load_file", (args: Array<string>): string | string[][] => {
-    props.setCommand("load_file");
+    props.setCommand("load_file ");
     if (args.length === 0) {
       return "Please provide a file name.";
     }
@@ -46,9 +48,24 @@ export function REPLInput(props: REPLInputProps) {
     if (!knownConstants.includes(filePath)) {
       return "Please check input, that file does not exist.";
     }
-
+    setLoadedFile(filePath);
     return "CSV has been loaded succesfully!";
   })
+
+  registerCommand("view", (args: Array<string>): string | string[][] => {
+    props.setCommand("view");
+    if (loadedFile == "") {
+      return "Ensure a file is loaded."
+    }
+
+    const fileData = viewMap.get(loadedFile);
+    if (Array.isArray(fileData)) {
+      return fileData;
+    }    
+    return "Bad filepath."
+  })
+
+
 
   // This function is triggered when the button is clicked.
   function handleSubmit(commandString: string) {
@@ -64,15 +81,22 @@ export function REPLInput(props: REPLInputProps) {
     // setCommandString("");
   }
 
-    function handleCommand(commandString: string): string {
+    function handleCommand(commandString: string): string | string[][] {
       const [command, ...args] = commandString.split(" ");
-      switch (command) {
-        case "load_file":
-          return handleLoadCSV(args); // Assuming only one filename argument is expected
-        // Add more cases for other commands here
-        default:
-          return "Unknown command.";
+      const func = processCommand(command);
+      if (func) {
+        const value = func(args);
+        return value;
       }
+      return "Command not found."
+      
+      // switch (command) {
+      //   case "load_file":
+      //     return handleLoadCSV(args); // Assuming only one filename argument is expected
+      //   // Add more cases for other commands here
+      //   default:
+      //     return "Unknown command.";
+      // }
     }
 
   function handleLoadCSV(args: Array<string>): string {
