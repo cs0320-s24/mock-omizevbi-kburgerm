@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import "../styles/main.css";
 import { ControlledInput } from "./ControlledInput";
+import { string } from "prop-types";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
@@ -58,7 +59,8 @@ export function REPLInput(props: REPLInputProps) {
       return "Please check input, that file does not exist.";
     }
 
-    const knownConstants: string[] = Object.keys(window); // Get all global variables as potential constants
+    const knownConstants: string[] = [];
+    knownConstants.push("mockData");
     if (!knownConstants.includes(filePath)) {
       return "Please check input, that file does not exist.";
     }
