@@ -4,7 +4,7 @@ import { ControlledInput } from "./ControlledInput";
 import { string } from "prop-types";
 import { REPLFunction } from "./REPLFunction"
 import { registerCommand, processCommand } from "./REPLFunction";
-import { viewMap } from "../mockdata";
+import { viewMap, searchMap } from "../mockdata";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
@@ -63,6 +63,22 @@ export function REPLInput(props: REPLInputProps) {
       return fileData;
     }    
     return "Bad filepath."
+  })
+
+  registerCommand("search", (args: Array<string>): string | string[][] => {
+    props.setCommand("search");
+
+    if (loadedFile=="") {
+      return "Please ensure a file is loaded"
+    }
+
+    const params = commandString.split(" ");
+    console.log(params);
+    const searchResults = searchMap.get(params[2]);
+    if (Array.isArray(searchResults)) {
+      return [searchResults];
+    }
+    return "No results found. Ensure your query is case-sensitive and free of errors."
   })
 
 

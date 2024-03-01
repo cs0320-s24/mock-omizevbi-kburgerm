@@ -9,4 +9,10 @@ const fileMap = new Map<string, string[][]>();
 
 fileMap.set("mockData", mockData);
 
+const mockSearch = new Map<string, string[]>();
+
+mockSearch.set("providence", ["Providence", "RI", "02912"])
+
 export const viewMap = fileMap;
+
+export const searchMap = mockSearch;
