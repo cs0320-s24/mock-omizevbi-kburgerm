@@ -5,9 +5,20 @@ const mockData = [
     ["D1", "D2", "D3", "D4"],
   ];
 
+const mockData2 = [
+    ["City", "State", "Zip"],
+    ["Providence", "RI", "02912"],
+    ["Oakland", "CA", "94501"],
+    ["Kirkwood", "CA", "95646"],
+  ];
+
+
+
+
 const fileMap = new Map<string, string[][]>();
 
 fileMap.set("mockData", mockData);
+fileMap.set("mockData2", mockData2);
 
 const mockSearch = new Map<string, string[]>();
 

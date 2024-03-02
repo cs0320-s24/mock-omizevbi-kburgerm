@@ -4,7 +4,7 @@ import { ControlledInput } from "./ControlledInput";
 import { string } from "prop-types";
 import { REPLFunction } from "./REPLFunction"
 import { registerCommand, processCommand } from "./REPLFunction";
-import { viewMap, searchMap } from "../mockdata";
+import { fileMap, viewMap, searchMap } from "../mockdata";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
@@ -59,9 +59,7 @@ export function REPLInput(props: REPLInputProps) {
       return "Please check input, that file does not exist.";
     }
 
-    const knownConstants: string[] = [];
-    knownConstants.push("mockData");
-    if (!knownConstants.includes(filePath)) {
+    if (filePath in viewMap.keys) {
       return "Please check input, that file does not exist.";
     }
     setLoadedFile(filePath);
