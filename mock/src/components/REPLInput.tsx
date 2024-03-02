@@ -4,7 +4,7 @@ import { ControlledInput } from "./ControlledInput";
 import { string } from "prop-types";
 import { REPLFunction } from "./REPLFunction"
 import { registerCommand, processCommand } from "./REPLFunction";
-import { fileMap, viewMap, searchMap } from "../mockdata";
+import { viewMap, searchMap } from "../mockdata";
 
 interface REPLInputProps {
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
