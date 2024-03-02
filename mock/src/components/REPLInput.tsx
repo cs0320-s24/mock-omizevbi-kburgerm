@@ -12,6 +12,9 @@ interface REPLInputProps {
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
 
+  modeBrief: boolean
+  setMode: Dispatch<SetStateAction<boolean>>
+
   command: string;
   setCommand: Dispatch<SetStateAction<string>>;
 }
@@ -24,13 +27,26 @@ export function REPLInput(props: REPLInputProps) {
   // TODO WITH TA : add a count state
   const [count, setCount] = useState<number>(0);
   const [loadedFile, setLoadedFile] = useState<string>('');
-  
 
   const mockData: Array<{ [key: string]: any }> = [
     { name: "John", age: 30 },
     { name: "Alice", age: 25 },
     { name: "Bob", age: 35 },
   ];
+
+  registerCommand("mode", (args: Array<string>): string | string[][] => {
+    props.setCommand("mode");
+    const newMode = args[0];
+    if (newMode == "verbose") {
+      props.setMode(false);
+      return "Mode switched to verbose."
+    } else if (newMode == "brief") {
+      props.setMode(true);
+      return "Mode switched to brief."
+    } else {
+      return "No " + newMode + " mode found. brief and verbose are the two modes."
+    }
+  })
 
   registerCommand("load_file", (args: Array<string>): string | string[][] => {
     props.setCommand("load_file ");
