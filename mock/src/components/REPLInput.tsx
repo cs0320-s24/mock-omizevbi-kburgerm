@@ -107,8 +107,17 @@ export function REPLInput(props: REPLInputProps) {
       return; // Do nothing if commandString is empty or whitespace
     }
     const result = handleCommand(commandString); // Call handleCommand to process the command
-    props.setHistory([...props.history, `${commandString} - ${result}`]);
-    setCommandString("");
+    const resultText = "Result: "
+    const commandText = "Command: "
+    if (props.modeBrief) {
+      
+      props.setHistory([...props.history, `${result}`])
+      setCommandString("");
+    } else {
+      props.setHistory([...props.history, `${commandText} ${commandString} ${resultText} ${result}`]);
+      setCommandString("");
+    }
+    
     // props.setHistory([...props.history, commandString]);
     // setCommandString("");
   }
@@ -131,29 +140,7 @@ export function REPLInput(props: REPLInputProps) {
       // }
     }
 
-  function handleLoadCSV(args: Array<string>): string {
-    if (args.length === 0) {
-      return "Please provide a file name.";
-    }
-    const filePath: string = args[0];
-
-    if (filePath === "nonexistent.csv") {
-      return "Please check input, that file does not exist.";
-    }
-
-    const knownConstants: string[] = [];
-    knownConstants.push("mockData");
-    if (!knownConstants.includes(filePath)) {
-      return "Please check input, that file does not exist.";
-    }
-
-    return "CSV has been loaded succesfully!";
-  }
-
-  /**
-   * We suggest breaking down this component into smaller components, think about the individual pieces
-   * of the REPL and how they connect to each other...
-   */
+  
   return (
     <div className="repl-input">
       {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in
