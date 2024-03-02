@@ -23,6 +23,7 @@ fileMap.set("mockData2", mockData2);
 const mockSearch = new Map<string, string[]>();
 
 mockSearch.set("providence", ["Providence", "RI", "02912"])
+mockSearch.set("A1", ["A1", "A2", "A3", "A4"])
 
 export const viewMap = fileMap;
 

@@ -18,22 +18,23 @@ interface REPLInputProps {
   command: string;
   setCommand: Dispatch<SetStateAction<string>>;
 }
-// You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
-// REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
+/**
+ * REPLInput function. takes in a history, a mode boolean, and command string.
+ * Registers the necessary commands and processes the input, calling the desired REPLFunction
+ * with the given command parameters.
+ * 
+ * @param props 
+ * @returns 
+ */
 export function REPLInput(props: REPLInputProps) {
-  // Remember: let React manage state in your webapp.
-  // Manages the contents of the input box
   const [commandString, setCommandString] = useState<string>("");
-  // TODO WITH TA : add a count state
   const [count, setCount] = useState<number>(0);
   const [loadedFile, setLoadedFile] = useState<string>('');
 
-  const mockData: Array<{ [key: string]: any }> = [
-    { name: "John", age: 30 },
-    { name: "Alice", age: 25 },
-    { name: "Bob", age: 35 },
-  ];
-
+  /**
+   * Registers the mode switch command.
+   * 
+   */
   registerCommand("mode", (args: Array<string>): string | string[][] => {
     props.setCommand("mode");
     const newMode = args[0];
@@ -48,6 +49,10 @@ export function REPLInput(props: REPLInputProps) {
     }
   })
 
+  /**
+   * Registers the load_file command.
+   * 
+   */
   registerCommand("load_file", (args: Array<string>): string | string[][] => {
     props.setCommand("load_file ");
     if (args.length === 0) {
@@ -66,6 +71,10 @@ export function REPLInput(props: REPLInputProps) {
     return "CSV has been loaded succesfully!";
   })
 
+  /**
+   * Registers the view command.
+   * 
+   */
   registerCommand("view", (args: Array<string>): string | string[][] => {
     props.setCommand("view");
     if (loadedFile == "") {
@@ -79,6 +88,10 @@ export function REPLInput(props: REPLInputProps) {
     return "Bad filepath."
   })
 
+  /**
+   * Registers the search command.
+   * 
+   */
   registerCommand("search", (args: Array<string>): string | string[][] => {
     props.setCommand("search");
 
@@ -97,29 +110,39 @@ export function REPLInput(props: REPLInputProps) {
 
 
 
-  // This function is triggered when the button is clicked.
+  /**
+   * Processes the command upon the submit button being clicked. Delegates to the correct
+   * REPLFunction based on the command name given, and adds the result to the REPLHistory,
+   * in different ways depending on the mode. 
+   * 
+   * @param commandString - full command given including command parameters
+   * @returns nothing, but adds results to history
+   */
   function handleSubmit(commandString: string) {
     setCount(count + 1);
-    // CHANGED
     if (!commandString.trim()) {
       return; // Do nothing if commandString is empty or whitespace
     }
     const result = handleCommand(commandString); // Call handleCommand to process the command
     const resultText = "Result: "
     const commandText = "Command: "
-    if (props.modeBrief) {
-      
+    if (props.modeBrief) {      
       props.setHistory([...props.history, `${result}`])
       setCommandString("");
     } else {
       props.setHistory([...props.history, `${commandText} ${commandString} ${resultText} ${result}`]);
       setCommandString("");
     }
-    
-    // props.setHistory([...props.history, commandString]);
-    // setCommandString("");
   }
 
+    /**
+     * Handles the given command. Uses REPLFunction's proccessCommand to return the desired 
+     * REPLFunction, and passes only the command parameters, not the command name itself,
+     * into the correct function.
+     * 
+     * @param commandString - full command string including parameters
+     * @returns the result of the command with the given command parameters
+     */
     function handleCommand(commandString: string): string | string[][] {
       const [command, ...args] = commandString.split(" ");
       const func = processCommand(command);
@@ -128,23 +151,11 @@ export function REPLInput(props: REPLInputProps) {
         return value;
       }
       return "Command not found."
-      
-      // switch (command) {
-      //   case "load_file":
-      //     return handleLoadCSV(args); // Assuming only one filename argument is expected
-      //   // Add more cases for other commands here
-      //   default:
-      //     return "Unknown command.";
-      // }
     }
 
   
   return (
     <div className="repl-input">
-      {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in
-            braces, so that React knows it should be interpreted as TypeScript */}
-      {/* I opted to use this HTML tag; you don't need to. It structures multiple input fields
-            into a single unit, which makes it easier for screenreaders to navigate. */}
       <fieldset>
         <legend>Enter a command:</legend>
         <ControlledInput
@@ -153,7 +164,6 @@ export function REPLInput(props: REPLInputProps) {
           ariaLabel={"Command input"}
         />
       </fieldset>
-      {/* TODO: Currently this button just counts up, can we make it push the contents of the input box to the history?*/}
       <button onClick={() => handleSubmit(commandString)}>
         Submitted {count} times
       </button>
