@@ -12,9 +12,8 @@ interface REPLHistoryProps {
 export function REPLHistory(props: REPLHistoryProps) { 
   return (
     <div className="repl-history" aria-label="repl-history">
-      {
-      props.history.map((command, index) => ( 
-        <p>{command}</p>        
+      {props.history.map((command, index) => (
+        <p key={index}>{command}</p> 
       ))}
     </div>
   );

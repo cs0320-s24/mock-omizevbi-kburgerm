@@ -12,13 +12,13 @@ const mockData2 = [
     ["Kirkwood", "CA", "95646"],
   ];
 
-
-
+const mockData3 = [[]];
 
 const fileMap = new Map<string, string[][]>();
 
 fileMap.set("mockData", mockData);
 fileMap.set("mockData2", mockData2);
+fileMap.set("mockData3", mockData3);
 
 const mockSearch = new Map<string, string[]>();
 

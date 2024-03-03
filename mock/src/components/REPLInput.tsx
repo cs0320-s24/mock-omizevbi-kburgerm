@@ -60,15 +60,11 @@ export function REPLInput(props: REPLInputProps) {
     }
     const filePath: string = args[0];
 
-    if (filePath === "nonexistent.csv") {
-      return "Please check input, that file does not exist.";
-    }
-
-    if (filePath in viewMap.keys) {
+    if (!(viewMap.get(filePath))) {
       return "Please check input, that file does not exist.";
     }
     setLoadedFile(filePath);
-    return "CSV has been loaded succesfully!";
+    return "CSV has been loaded successfully!";
   })
 
   /**
@@ -82,10 +78,10 @@ export function REPLInput(props: REPLInputProps) {
     }
 
     const fileData = viewMap.get(loadedFile);
-    if (Array.isArray(fileData)) {
-      return fileData;
-    }    
-    return "Bad filepath."
+    if (!fileData || (fileData.length === 1 && fileData[0].length === 0)) {
+      return "No data found for the loaded file.";
+    }
+    return fileData;
   })
 
   /**
@@ -96,7 +92,7 @@ export function REPLInput(props: REPLInputProps) {
     props.setCommand("search");
 
     if (loadedFile=="") {
-      return "Please ensure a file is loaded"
+      return "Please ensure a file is loaded."
     }
 
     const params = commandString.split(" ");
@@ -164,8 +160,9 @@ export function REPLInput(props: REPLInputProps) {
           ariaLabel={"Command input"}
         />
       </fieldset>
-      <button onClick={() => handleSubmit(commandString)}>
-        Submitted {count} times
+      <button 
+      aria-label={"Submit"}
+      onClick={() => handleSubmit(commandString)}> Submitted {count} times
       </button>
     </div>
   );
